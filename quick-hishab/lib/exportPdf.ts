@@ -10,7 +10,7 @@ export function exportPdf(
   calc: CalcResult,
   settings: CalcSettings,
   mode: ExportMode = "full",
-  reportTitle = "SmartCalc AI Report"
+  reportTitle = "SmartCalc AI Report",
 ) {
   const doc = new jsPDF();
   const reportId = `SC-${Date.now().toString(36).toUpperCase()}`;
@@ -35,7 +35,13 @@ export function exportPdf(
     autoTable(doc, {
       startY: cursorY,
       head: [["ITEM", "QTY", "UNIT", "UNIT PRICE", "TOTAL"]],
-      body: items.map((i) => [i.item, String(i.qty), i.unit.toUpperCase(), formatBDT(i.price), formatBDT(i.total)]),
+      body: items.map((i) => [
+        i.item,
+        String(i.qty),
+        i.unit.toUpperCase(),
+        formatBDT(i.price),
+        formatBDT(i.total),
+      ]),
       headStyles: {
         fillColor: [22, 90, 120],
         textColor: [255, 255, 255],
@@ -85,11 +91,11 @@ export function exportPdf(
     doc.text("GRAND TOTAL", margin + colWidth + 8, labelY);
 
     doc.setTextColor(255, 255, 255);
-    doc.setFont(undefined, "bold");
+    doc.setFont("helvetica", "bold");
     doc.setFontSize(13);
     doc.text(String(items.length), margin + 8, valueY);
     doc.text(formatBDT(calc.grandTotal), margin + colWidth + 8, valueY);
-    doc.setFont(undefined, "normal");
+    doc.setFont("helvetica", "normal");
 
     cursorY += boxHeight + 10;
   }
@@ -99,7 +105,7 @@ export function exportPdf(
   doc.text(
     "Generated with SmartCalc AI · by Md Tanvir Hossain",
     14,
-    (doc as any).internal.pageSize.getHeight() - 10
+    (doc as any).internal.pageSize.getHeight() - 10,
   );
 
   doc.save(`smartcalc-${mode === "full" ? "report" : "total"}-${reportId}.pdf`);
