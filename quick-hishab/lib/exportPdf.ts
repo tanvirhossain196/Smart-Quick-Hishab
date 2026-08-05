@@ -10,7 +10,7 @@ export function exportPdf(
   calc: CalcResult,
   settings: CalcSettings,
   mode: ExportMode = "full",
-  reportTitle = "Quick Hishab Report",
+  reportTitle = "SmartCalc AI Report"
 ) {
   const doc = new jsPDF();
   const reportId = `SC-${Date.now().toString(36).toUpperCase()}`;
@@ -35,13 +35,7 @@ export function exportPdf(
     autoTable(doc, {
       startY: cursorY,
       head: [["ITEM", "QTY", "UNIT", "UNIT PRICE", "TOTAL"]],
-      body: items.map((i) => [
-        i.item,
-        String(i.qty),
-        i.unit.toUpperCase(),
-        formatBDT(i.price),
-        formatBDT(i.total),
-      ]),
+      body: items.map((i) => [i.item, String(i.qty), i.unit.toUpperCase(), formatBDT(i.price), formatBDT(i.total)]),
       headStyles: {
         fillColor: [22, 90, 120],
         textColor: [255, 255, 255],
@@ -63,7 +57,6 @@ export function exportPdf(
       },
       theme: "grid",
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     cursorY = (doc as any).lastAutoTable.finalY + 8;
   }
 
@@ -104,10 +97,10 @@ export function exportPdf(
   doc.setFontSize(8);
   doc.setTextColor(150, 150, 150);
   doc.text(
-    "Generated with Quick Hishab · by Md Tanvir Hossain",
+    "Generated with SmartCalc AI · by Md Tanvir Hossain",
     14,
-    (doc as any).internal.pageSize.getHeight() - 10,
+    (doc as any).internal.pageSize.getHeight() - 10
   );
 
-  doc.save(`quick hishab-${mode === "full" ? "report" : "total"}-${reportId}.pdf`);
+  doc.save(`smartcalc-${mode === "full" ? "report" : "total"}-${reportId}.pdf`);
 }
